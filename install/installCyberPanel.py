@@ -923,15 +923,16 @@ def Main(cwd, mysql, distro, ent, serial=None, port="8090", ftp=None, dns=None, 
     if ent == 0:
         installer.fix_ols_configs()
 
-    logging.InstallLog.writeToFile('Installing MySQL,60')
-    installer.installMySQL(mysql)
-    installer.changeMYSQLRootPassword()
-
-    installer.startMariaDB()
-
     if remotemysql == 'OFF':
+        logging.InstallLog.writeToFile('Installing MySQL,60')
+        installer.installMySQL(mysql)
+        installer.changeMYSQLRootPassword()
+        installer.startMariaDB()
+
         if distro == ubuntu:
             installer.fixMariaDB()
+    else:
+        logging.InstallLog.writeToFile('Using remote MySQL,60')
 
     mysqlUtilities.createDatabase("cyberpanel", "cyberpanel", InstallCyberPanel.mysqlPassword, publicip)
 

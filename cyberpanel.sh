@@ -1110,8 +1110,10 @@ if [[ $Server_OS = "CentOS" ]] ; then
   # Setup EPEL repository based on version
   setup_epel_repo
 
-  # Setup MariaDB repository
-  setup_mariadb_repo
+  # Setup MariaDB repository only if local MySQL will be used
+  if [[ "$Remote_MySQL" != "On" ]] ; then
+    setup_mariadb_repo
+  fi
 
   if [[ "$Server_OS_Version" = "9" ]]; then
     # Check if architecture is aarch64
