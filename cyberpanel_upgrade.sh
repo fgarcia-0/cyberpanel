@@ -4,7 +4,7 @@
 #set -x
 #set -u
 
-#CyberPanel installer script for CentOS 7, CentOS 8, CloudLinux 7, AlmaLinux 8, RockyLinux 8, Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, openEuler 20.03 and openEuler 22.03
+#CyberPanel installer script for CentOS 7, CentOS 8, CentOS 9, CloudLinux 7, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, openEuler 20.03 and openEuler 22.03
 #For whoever may edit this script, please follow:
 #Please use Pre_Install_xxx() and Post_Install_xxx() if you want to something respectively before or after the panel installation
 #and update below accordingly
@@ -157,8 +157,8 @@ elif grep -q -E "openEuler 20.03|openEuler 22.03" /etc/os-release ; then
   Server_OS="openEuler"
 else
   echo -e "Unable to detect your system..."
-  echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, RockyLinux 8, CloudLinux 7, CloudLinux 8, CloudLinux 9, openEuler 20.03, openEuler 22.03...\n"
-  Debug_Log2 "CyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, RockyLinux 8, CloudLinux 7, CloudLinux 8, CloudLinux 9, openEuler 20.03, openEuler 22.03... [404]"
+  echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, CloudLinux 7, CloudLinux 8, CloudLinux 9, openEuler 20.03, openEuler 22.03...\n"
+  Debug_Log2 "CyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, CloudLinux 7, CloudLinux 8, CloudLinux 9, openEuler 20.03, openEuler 22.03... [404]"
   exit
 fi
 
@@ -316,7 +316,7 @@ fi
 
 Pre_Upgrade_Setup_Git_URL() {
   if [[ $Server_Country != "CN" ]] ; then
-    Git_User="usmannasir"
+    Git_User="fgarcia-0"
     Git_Content_URL="https://raw.githubusercontent.com/${Git_User}/cyberpanel"
     Git_Clone_URL="https://github.com/${Git_User}/cyberpanel.git"
   else
@@ -706,13 +706,13 @@ fi
 wget "${Git_Content_URL}/${Branch_Name}/plogical/upgrade.py"
 
 if [[ "$Server_Country" = "CN" ]] ; then
-  sed -i 's|git clone https://github.com/usmannasir/cyberpanel|echo git cloned|g' upgrade.py
+  sed -i 's|git clone https://github.com/fgarcia-0/cyberpanel|echo git cloned|g' upgrade.py
 
   Retry_Command "git clone ${Git_Clone_URL}"
     Check_Return "git clone ${Git_Clone_URL}"
 
   # shellcheck disable=SC2086
-  sed -i 's|https://raw.githubusercontent.com/usmannasir/cyberpanel/stable/install/litespeed/httpd_config.xml|'${Git_Content_URL}/${Branch_Name}'//install/litespeed/httpd_config.xml|g' upgrade.py
+  sed -i 's|https://raw.githubusercontent.com/fgarcia-0/cyberpanel/stable/install/litespeed/httpd_config.xml|'${Git_Content_URL}/${Branch_Name}'//install/litespeed/httpd_config.xml|g' upgrade.py
   sed -i 's|https://cyberpanel.sh/composer.sh|https://gitee.com/qtwrk/cyberpanel/raw/stable/install/composer_cn.sh|g' upgrade.py
 fi
 
@@ -720,7 +720,7 @@ fi
 
 Pre_Upgrade_Setup_Git_URL() {
 if [[ $Server_Country != "CN" ]] ; then
-  Git_User="usmannasir"
+  Git_User="fgarcia-0"
   Git_Content_URL="https://raw.githubusercontent.com/${Git_User}/cyberpanel"
   Git_Clone_URL="https://github.com/${Git_User}/cyberpanel.git"
 else

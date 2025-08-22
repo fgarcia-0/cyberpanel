@@ -22,7 +22,7 @@ class FirewallUtilities:
     def resFailed(res):
         if (ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20) and res != 0:
             return True
-        elif (ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8) and res == 1:
+        elif (ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]) and res == 1:
             return True
         return False
 

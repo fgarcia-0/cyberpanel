@@ -722,7 +722,7 @@ echo
             ######
 
             # install required packages for CSF perl and /usr/bin/host
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'yum install bind-utils net-tools perl-libwww-perl.noarch perl-LWP-Protocol-https.noarch perl-GDGraph ipset -y'
                 ProcessUtilities.normalExecutioner(command)
             elif ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20:

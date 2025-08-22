@@ -56,7 +56,7 @@ class Docker_Sites(multi.Thread):
             pass
         try:
             ### set docker name for listing/deleting etc
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 self.DockerAppName = f"{self.data['name'].replace(' ', '')}-{self.data['name'].replace(' ', '-')}"
             else:
                 self.DockerAppName = f"{self.data['name'].replace(' ', '')}_{self.data['name'].replace(' ', '-')}"
@@ -130,7 +130,7 @@ class Docker_Sites(multi.Thread):
 
     def InstallDocker(self):
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
             command = 'dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo'
 
@@ -463,7 +463,7 @@ services:
 
             ####
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.cent8 or ProcessUtilities.decideDistro() == ProcessUtilities.centos:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9, ProcessUtilities.centos]:
                 dockerCommand = 'docker compose'
             else:
                 dockerCommand = 'docker-compose'
@@ -513,7 +513,7 @@ services:
             execPath = execPath + f" SetupHTAccess --port {self.data['port']} --htaccess {self.data['htaccessPath']}"
             ProcessUtilities.executioner(execPath, self.data['externalApp'])
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 group = 'nobody'
             else:
                 group = 'nogroup'
@@ -774,7 +774,7 @@ services:
             containers = []
             
             # Get both possible name formats
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 search_name = self.DockerAppName  # Already in hyphen format for CentOS
             else:
                 # For Ubuntu, convert underscore to hyphen as containers use hyphens
@@ -1271,7 +1271,7 @@ services:
                 logging.statusWriter(self.JobID, 'Docker compose file created...,40')
 
                 # Deploy containers
-                if ProcessUtilities.decideDistro() == ProcessUtilities.cent8 or ProcessUtilities.decideDistro() == ProcessUtilities.centos:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9, ProcessUtilities.centos]:
                     dockerCommand = 'docker compose'
                 else:
                     dockerCommand = 'docker-compose'

@@ -1312,7 +1312,7 @@ echo $oConfig->Save() ? 'Done' : 'Error';
             command = "find /usr/local/CyberCP/ -name '*.pyc' -delete"
             ProcessUtilities.executioner(command, 'root', True)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'chown root:pdns /etc/pdns/pdns.conf'
                 ProcessUtilities.executioner(command, 'root', True)
 

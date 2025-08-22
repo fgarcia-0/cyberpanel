@@ -93,7 +93,7 @@ class vhost:
             try:
                 os.makedirs(pathHTML)
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     groupName = 'nobody'
                 else:
                     groupName = 'nogroup'
@@ -114,7 +114,7 @@ class vhost:
             try:
                 os.makedirs(pathLogs)
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     groupName = 'nobody'
                 else:
                     groupName = 'nogroup'
@@ -440,7 +440,7 @@ class vhost:
 
                 ##
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     command = 'userdel -r -f %s' % (externalApp)
                 else:
                     command = 'deluser %s' % (externalApp)
@@ -515,7 +515,7 @@ class vhost:
 
                 ##
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     command = 'userdel -r -f %s' % (externalApp)
                 else:
                     command = 'deluser %s' % (externalApp)
@@ -944,7 +944,7 @@ class vhost:
             command = 'sudo -u %s mkdir %s' % (virtualHostUser, path)
             ProcessUtilities.normalExecutioner(command)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 groupName = 'nobody'
             else:
                 groupName = 'nogroup'

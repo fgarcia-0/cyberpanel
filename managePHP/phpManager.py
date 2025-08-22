@@ -75,7 +75,7 @@ class PHPManager:
             from ApachController.ApacheController import ApacheController as ApachController
             result = ProcessUtilities.outputExecutioner(f'ls -la {ApachController.phpBasepath}')
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 # Get the lines containing 'lsphp' in the output
                 lsphp_lines = [line for line in result.split('\n') if 'php' in line]

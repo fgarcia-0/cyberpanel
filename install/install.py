@@ -34,7 +34,7 @@ centos = install_utils.centos
 ubuntu = install_utils.ubuntu
 cent8 = install_utils.cent8
 openeuler = install_utils.openeuler
-cent9 = 4  # Not in install_utils yet
+cent9 = install_utils.cent9
 CloudLinux8 = 0  # Not in install_utils yet
 
 # Using shared function from install_utils
@@ -71,7 +71,7 @@ class preFlightsChecks:
     
     def is_centos_family(self):
         """Check if distro is CentOS, CentOS 8, or OpenEuler"""
-        return self.distro in [centos, cent8, openeuler]
+        return self.distro in [centos, cent8, cent9, openeuler]
     
     def manage_service(self, service_name, action="start"):
         """Unified service management"""
@@ -481,6 +481,9 @@ class preFlightsChecks:
         elif self.distro == cent8:
             command = 'rpm -Uvh http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el8.noarch.rpm'
             preFlightsChecks.call(command, self.distro, command, command, 1, 1, os.EX_OSERR)
+        elif self.distro == cent9:
+            command = 'rpm -Uvh http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el9.noarch.rpm'
+            preFlightsChecks.call(command, self.distro, command, command, 1, 1, os.EX_OSERR)
 
     def fix_selinux_issue(self):
         try:
@@ -511,7 +514,7 @@ class preFlightsChecks:
 
         os.chdir('/usr/local')
 
-        command = "git clone https://github.com/usmannasir/cyberpanel"
+        command = "git clone https://github.com/fgarcia-0/cyberpanel"
         preFlightsChecks.call(command, self.distro, command, command, 1, 1, os.EX_OSERR)
 
         shutil.move('cyberpanel', 'CyberCP')
@@ -852,7 +855,7 @@ password="%s"
             if not os.path.exists("/usr/local/CyberCP/public"):
                 os.mkdir("/usr/local/CyberCP/public")
 
-            command = 'wget -O /usr/local/CyberCP/public/phpmyadmin.zip https://github.com/usmannasir/cyberpanel/raw/stable/phpmyadmin.zip'
+            command = 'wget -O /usr/local/CyberCP/public/phpmyadmin.zip https://github.com/fgarcia-0/cyberpanel/raw/stable/phpmyadmin.zip'
 
             preFlightsChecks.call(command, self.distro, '[download_install_phpmyadmin]',
                                   command, 1, 0, os.EX_OSERR)
@@ -944,18 +947,21 @@ $cfg['Servers'][$i]['LogoutURL'] = 'phpmyadminsignin.php?logout';
             if self.distro == centos:
                 command = 'yum install --enablerepo=gf-plus -y postfix3 postfix3-ldap postfix3-mysql postfix3-pcre'
                 preFlightsChecks.call(command, self.distro, command, command, 1, 0, os.EX_OSERR)
-            elif self.distro == cent8:
-
-                clAPVersion = FetchCloudLinuxAlmaVersionVersion()
-                type = clAPVersion.split('-')[0]
-                version = int(clAPVersion.split('-')[1])
-
-                if type == 'al' and version >= 90:
+            elif self.distro in [cent8, cent9]:
+                if self.distro == cent9:
                     command = 'dnf --nogpg install -y https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el9.noarch.rpm'
                     preFlightsChecks.call(command, self.distro, command, command, 1, 0, os.EX_OSERR)
                 else:
-                    command = 'dnf --nogpg install -y https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el8.noarch.rpm'
-                    preFlightsChecks.call(command, self.distro, command, command, 1, 0, os.EX_OSERR)
+                    clAPVersion = FetchCloudLinuxAlmaVersionVersion()
+                    type = clAPVersion.split('-')[0]
+                    version = int(clAPVersion.split('-')[1])
+
+                    if type == 'al' and version >= 90:
+                        command = 'dnf --nogpg install -y https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el9.noarch.rpm'
+                        preFlightsChecks.call(command, self.distro, command, command, 1, 0, os.EX_OSERR)
+                    else:
+                        command = 'dnf --nogpg install -y https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el8.noarch.rpm'
+                        preFlightsChecks.call(command, self.distro, command, command, 1, 0, os.EX_OSERR)
 
                 command = 'dnf install --enablerepo=gf-plus postfix3 postfix3-mysql -y'
                 preFlightsChecks.call(command, self.distro, command, command, 1, 1, os.EX_OSERR)
@@ -982,7 +988,7 @@ $cfg['Servers'][$i]['LogoutURL'] = 'phpmyadminsignin.php?logout';
 
             if self.distro == centos:
                 command = 'yum --enablerepo=gf-plus -y install dovecot23 dovecot23-mysql'
-            elif self.distro == cent8:
+            elif self.distro in [cent8, cent9]:
                 command = 'dnf install --enablerepo=gf-plus dovecot23 dovecot23-mysql -y'
             elif self.distro == openeuler:
                 command = 'dnf install dovecot -y'
@@ -2077,7 +2083,7 @@ $cfg['Servers'][$i]['LogoutURL'] = 'phpmyadminsignin.php?logout';
 
     def installOpenDKIM(self):
         try:
-            if self.distro == cent8 or self.distro == openeuler or self.distro == ubuntu:
+            if self.distro in [cent8, cent9, openeuler, ubuntu]:
                 self.install_package('opendkim opendkim-tools')
             else:
                 self.install_package('opendkim')
@@ -2125,7 +2131,7 @@ milter_default_action = accept
             writeToFile.write(configData)
             writeToFile.close()
 
-            if self.distro == ubuntu or self.distro == cent8:
+            if self.distro == ubuntu or self.distro in [cent8, cent9]:
                 data = open(openDKIMConfigurePath, 'r').readlines()
                 writeToFile = open(openDKIMConfigurePath, 'w')
                 for items in data:
@@ -2161,7 +2167,7 @@ milter_default_action = accept
                 logging.InstallLog.writeToFile("[setupPHPSymlink] PHP 8.3 not found, ensuring it's installed...")
                 
                 # Install PHP 8.3 based on OS
-                if self.distro == centos or self.distro == cent8 or self.distro == openeuler:
+                if self.distro in [centos, cent8, cent9, openeuler]:
                     command = 'yum install lsphp83 lsphp83-* -y'
                 else:
                     command = 'DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install lsphp83 lsphp83-*'

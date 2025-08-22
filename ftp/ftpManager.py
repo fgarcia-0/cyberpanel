@@ -309,7 +309,7 @@ class FTPManager:
 
             command = "yum install -y pure-ftpd"
             ProcessUtilities.executioner(command, 'root', True)
-        elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        elif ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
             command = 'yum erase pure-ftp* -y'
             ProcessUtilities.executioner(command, 'root', True)
@@ -470,7 +470,7 @@ class FTPManager:
                     logging.CyberCPLogFileWriter.writeToFile("[ERROR] Could not create directory for FTP SSL: " + str(e))
                     raise
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'openssl req -newkey rsa:1024 -new -nodes -x509 -days 3650 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem'
             else:
                 command = 'openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem'
