@@ -784,7 +784,7 @@ password=%s
                 logging.statusWriter(self.logFile, message, 1)
                 return 1
             
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 localCronPath = "/var/spool/cron/" + self.externalApp
             else:
                 localCronPath = "/var/spool/cron/crontabs/" + self.externalApp

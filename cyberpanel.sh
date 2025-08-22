@@ -88,7 +88,7 @@ log_info "CyberPanel installation started"
 log_info "Log file: $LOG_FILE"
 log_info "Debug log file: $DEBUG_LOG_FILE"
 
-#CyberPanel installer script for CentOS 7, CentOS 8, CloudLinux 7, AlmaLinux 8, RockyLinux 8, Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, openEuler 20.03 and openEuler 22.03
+#CyberPanel installer script for CentOS 7, CentOS 8, CentOS 9, CloudLinux 7, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, openEuler 20.03 and openEuler 22.03
 #For whoever may edit this script, please follow:
 #Please use Pre_Install_xxx() and Post_Install_xxx() if you want to something respectively before or after the panel installation
 #and update below accordingly
@@ -99,7 +99,7 @@ log_info "Debug log file: $DEBUG_LOG_FILE"
 #Set_Default_Variables() --->  set some default variable for later use
 #Check_Root()  ---> check for root
 #Check_Server_IP()  ---> check for server IP and geolocation at country level
-#Check_OS() ---> check system , support on CentOS 7/8, RockyLinux 8, AlmaLinux 8, Ubuntu 18/20, openEuler 20.03/22.03 and CloudLinux 7, 8 is untested.
+#Check_OS() ---> check system , support on CentOS 7/8/9, RockyLinux 8/9, AlmaLinux 8/9, Ubuntu 18/20, openEuler 20.03/22.03 and CloudLinux 7, 8 is untested.
 #Check_Virtualization()  ---> check for virtualizaon , #LXC not supported# , some edit needed on OVZ
 #Check_Panel() --->  check to make sure no other panel is installed
 #Check_Process() ---> check no other process like Apache is running
@@ -540,8 +540,8 @@ elif grep -q -E "openEuler 20.03|openEuler 22.03" /etc/os-release ; then
   Server_OS="openEuler"
 else
   echo -e "Unable to detect your system..."
-  echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, CentOS 9, RHEL 8, RHEL 9, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03...\n"
-  Debug_Log2 "CyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, CentOS 9, RHEL 8, RHEL 9, AlmaLinux 8, RockyLinux 8, AlmaLinux 9, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03... [404]"
+  echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, CentOS 9, RHEL 8, RHEL 9, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03...\n"
+  Debug_Log2 "CyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, CentOS 9, RHEL 8, RHEL 9, AlmaLinux 8, RockyLinux 8, RockyLinux 9, AlmaLinux 9, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03... [404]"
   exit
 fi
 
@@ -575,7 +575,7 @@ log_info "Checking virtualization type"
 #  Debug_Log2 "CyberPanel does not support LXC.. [404]"
 #  exit
 #fi
-#remove per https://github.com/usmannasir/cyberpanel/issues/589
+#remove per https://github.com/fgarcia-0/cyberpanel/issues/589
 
 if hostnamectl | grep -q "Virtualization: openvz"; then
   echo -e "OpenVZ detected...\n"
@@ -1748,7 +1748,7 @@ if [[ $Server_Edition = "Enterprise" ]] ; then
   Enterprise_Flag="--ent ent --serial "
 fi
 
-sed -i 's|git clone https://github.com/usmannasir/cyberpanel|echo downloaded|g' install.py
+sed -i 's|git clone https://github.com/fgarcia-0/cyberpanel|echo downloaded|g' install.py
 sed -i 's|mirror.cyberpanel.net|cyberpanel.sh|g' install.py
 
 
@@ -2196,7 +2196,7 @@ chown -R cyberpanel:cyberpanel /usr/local/CyberCP/lib64 || true
 
 Pre_Install_Setup_Git_URL() {
 if [[ $Server_Country != "CN" ]] ; then
-  Git_User="usmannasir"
+  Git_User="fgarcia-0"
   Git_Content_URL="https://raw.githubusercontent.com/${Git_User}/cyberpanel"
   Git_Clone_URL="https://github.com/${Git_User}/cyberpanel.git"
 else

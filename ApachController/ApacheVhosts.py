@@ -17,7 +17,7 @@ import re
 class ApacheVhost:
     apacheInstallStatusPath = '/home/cyberpanel/apacheInstallStatus'
 
-    if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+    if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
         serverRootPath = '/etc/httpd'
         configBasePath = '/etc/httpd/conf.d/'
@@ -66,7 +66,7 @@ class ApacheVhost:
     lswsMainConf = "/usr/local/lsws/conf/httpd_config.conf"
 
     count = 0
-    if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+    if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
         sslBasePath = "/etc/httpd/conf.d/ssl/"
     else:
         sslBasePath = "/etc/apache2/conf-enabled/"
@@ -172,7 +172,7 @@ class ApacheVhost:
     def perHostVirtualConf(administratorEmail,externalApp, virtualHostUser, phpVersion, virtualHostName):
         try:
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 sockPath = '/var/run/php-fpm/'
                 group = 'nobody'
             else:
@@ -298,7 +298,7 @@ class ApacheVhost:
 
             ## Non - SSL Conf
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 sockPath = '/var/run/php-fpm/'
                 group = 'nobody'
             else:
@@ -420,7 +420,7 @@ class ApacheVhost:
         if os.path.exists(phpPath):
             os.remove(phpPath)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php54-php-fpm'
             else:
                 phpService = f"php5.4-fpm"
@@ -433,7 +433,7 @@ class ApacheVhost:
 
             os.remove(phpPath)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php55-php-fpm'
             else:
                 phpService = f"php5.5-fpm"
@@ -444,7 +444,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('56', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php56-php-fpm'
             else:
                 phpService = f"php5.6-fpm"
@@ -455,7 +455,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('70', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php70-php-fpm'
             else:
                 phpService = f"php7.0-fpm"
@@ -466,7 +466,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('71', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php71-php-fpm'
             else:
                 phpService = f"php7.1-fpm"
@@ -477,7 +477,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('72', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php72-php-fpm'
             else:
                 phpService = f"php7.2-fpm"
@@ -488,7 +488,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('73', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php73-php-fpm'
             else:
                 phpService = f"php7.3-fpm"
@@ -499,7 +499,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('74', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php74-php-fpm'
             else:
                 phpService = f"php7.4-fpm"
@@ -510,7 +510,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('80', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php80-php-fpm'
             else:
                 phpService = f"php8.0-fpm"
@@ -521,7 +521,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('81', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php81-php-fpm'
             else:
                 phpService = f"php8.1-fpm"
@@ -532,7 +532,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('82', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php82-php-fpm'
             else:
                 phpService = f"php8.2-fpm"
@@ -543,7 +543,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('83', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php83-php-fpm'
             else:
                 phpService = f"php8.3-fpm"
@@ -554,7 +554,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('84', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php84-php-fpm'
             else:
                 phpService = f"php8.4-fpm"
@@ -565,7 +565,7 @@ class ApacheVhost:
         phpPath = ApacheVhost.DecidePHPPath('85', virtualHostName)
         if os.path.exists(phpPath):
             os.remove(phpPath)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php85-php-fpm'
             else:
                 phpService = f"php8.5-fpm"
@@ -578,7 +578,7 @@ class ApacheVhost:
         try:
             logging.writeToFile(f"PHP version passed to Apache function: {phpVersion}")
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 sockPath = '/var/run/php-fpm/'
                 group = 'nobody'
             else:
@@ -623,7 +623,7 @@ class ApacheVhost:
 
             ### minor bug fix of updating default php conf user in selected fpm
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 defaultConfPath = finalConfPath.replace(virtualHostName, 'www')
 
                 command = f"sed -i 's/www-data/apache/g' {defaultConfPath}"
@@ -650,7 +650,7 @@ class ApacheVhost:
     def DecidePHPPathforManager(apache, phpVers):
         if apache == 0 or apache == None:
             phpVers = "php" + PHPManager.getPHPString(phpVers)
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 path = "/usr/local/lsws/ls" + phpVers + "/etc/php.ini"
             else:
                 initial = phpVers[3]
@@ -659,7 +659,7 @@ class ApacheVhost:
                 completeName = str(initial) + '.' + str(final)
                 path = "/usr/local/lsws/ls" + phpVers + "/etc/php/" + completeName + "/litespeed/php.ini"
         else:
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpVers = "php" + PHPManager.getPHPString(phpVers)
                 path = f'/etc/opt/remi/{phpVers}/php.ini'
             else:
@@ -672,7 +672,7 @@ class ApacheVhost:
 
     @staticmethod
     def DecideFPMServiceName(phpVersion):
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             php = PHPManager.getPHPString(phpVersion)
             return f'php{php}-php-fpm'
         else:

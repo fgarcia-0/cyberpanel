@@ -3302,7 +3302,7 @@ context /cyberpanel_suspension_page.html {
                 command = f'setquota -u {modifyWeb.externalApp} {spaceString} 0 0 /'
                 ProcessUtilities.executioner(command)
 
-            ## Fix https://github.com/usmannasir/cyberpanel/issues/998
+            ## Fix https://github.com/fgarcia-0/cyberpanel/issues/998
 
             # from plogical.IncScheduler import IncScheduler
             # isPU = IncScheduler('CalculateAndUpdateDiskUsage', {})
@@ -4054,7 +4054,7 @@ context /cyberpanel_suspension_page.html {
 
             CronUtil.CronPrem(0)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 cronPath = "/var/spool/cron/" + website.externalApp
             else:
                 cronPath = "/var/spool/cron/crontabs/" + website.externalApp
@@ -4273,7 +4273,7 @@ context /cyberpanel_suspension_page.html {
 
             website = Websites.objects.get(domain=self.domain)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 cronPath = "/var/spool/cron/" + website.externalApp
             else:
                 cronPath = "/var/spool/cron/crontabs/" + website.externalApp
@@ -5335,7 +5335,7 @@ StrictHostKeyChecking no
 
             tempStatusPath = "/home/cyberpanel/" + str(randint(1000, 9999))
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 sockPath = '/var/run/php-fpm/'
                 group = 'nobody'
             else:
@@ -5365,7 +5365,7 @@ StrictHostKeyChecking no
             if os.path.exists(ProcessUtilities.debugPath):
                 logging.CyberCPLogFileWriter.writeToFile(f'PHP path in tune settings {phpPath}')
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 if phpPath[1] == 'etc':
                     phpVersion = phpPath[4][3] + phpPath[4][4]
                     phpVersion = f'PHP {phpPath[4][3]}.{phpPath[4][4]}'

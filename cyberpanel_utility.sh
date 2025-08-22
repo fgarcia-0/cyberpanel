@@ -4,8 +4,8 @@
 export LC_CTYPE=en_US.UTF-8
 SUDO_TEST=$(set)
 BRANCH_NAME="stable"
-GIT_URL="github.com/usmannasir/cyberpanel"
-GIT_CONTENT_URL="raw.githubusercontent.com/usmannasir/cyberpanel"
+GIT_URL="github.com/fgarcia-0/cyberpanel"
+GIT_CONTENT_URL="raw.githubusercontent.com/fgarcia-0/cyberpanel"
 
 check_OS() {
 	if [[ ! -f /etc/os-release ]] ; then
@@ -29,7 +29,7 @@ check_OS() {
 	  Server_OS="openEuler"
 	else
 	  echo -e "Unable to detect your system..."
-	  echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, RockyLinux 8, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03...\n"
+          echo -e "\nCyberPanel is supported on x86_64 based Ubuntu 18.04, Ubuntu 20.04, Ubuntu 20.10, Ubuntu 22.04, CentOS 7, CentOS 8, AlmaLinux 8, AlmaLinux 9, RockyLinux 8, RockyLinux 9, CloudLinux 7, CloudLinux 8, openEuler 20.03, openEuler 22.03...\n"
   	  exit
 	fi
 

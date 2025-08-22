@@ -894,7 +894,7 @@ PDNS_Token='{APIKey}'
                 command = f'echo "{PDNSContent}" >> {path}'
                 ProcessUtilities.executioner(command,None, True)
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     PDNSPath = '/etc/pdns/pdns.conf'
                 else:
                     PDNSPath = '/etc/powerdns/pdns.conf'

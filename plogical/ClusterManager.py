@@ -90,7 +90,7 @@ class ClusterManager:
 
                 ClusterConfigFailover = config['ClusterConfigFailover']
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     ClusterConfigFailover = ClusterConfigFailover.replace('/usr/lib/galera/libgalera_smm.so', '/usr/lib64/galera-4/libgalera_smm.so')
 
                 writeToFile = open(ClusterPath, 'w')
@@ -106,7 +106,7 @@ class ClusterManager:
 
                 ClusterConfigMaster = config['ClusterConfigMaster']
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     ClusterConfigMaster = ClusterConfigMaster.replace('/usr/lib/galera/libgalera_smm.so', '/usr/lib64/galera-4/libgalera_smm.so')
 
                 writeToFile = open(ClusterPath, 'w')

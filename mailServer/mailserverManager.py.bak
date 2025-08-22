@@ -893,7 +893,7 @@ class MailServerManager(multi.Thread):
 
     def install_postfix_dovecot(self):
         try:
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'yum remove postfix -y'
                 ProcessUtilities.executioner(command)
             elif ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu:
@@ -904,7 +904,7 @@ class MailServerManager(multi.Thread):
 
             if ProcessUtilities.decideDistro() == ProcessUtilities.centos:
                 command = 'yum install --enablerepo=gf-plus -y postfix3 postfix3-ldap postfix3-mysql postfix3-pcre'
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 command = 'dnf --nogpg install -y https://mirror.ghettoforge.org/distributions/gf/el/8/gf/x86_64/gf-release-8-11.gf.el8.noarch.rpm'
                 ProcessUtilities.executioner(command)
@@ -942,7 +942,7 @@ class MailServerManager(multi.Thread):
             
             logging.CyberCPLogFileWriter.statusWriter(self.extraArgs['tempStatusPath'], 'Re-installing Dovecot..,15')
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 pass
             else:
                 command = 'apt-get -y install dovecot-imapd dovecot-pop3d postfix-mysql'
@@ -953,7 +953,7 @@ class MailServerManager(multi.Thread):
 
             if ProcessUtilities.decideDistro() == ProcessUtilities.centos:
                 command = 'yum --enablerepo=gf-plus -y install dovecot23 dovecot23-mysql'
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'dnf install --enablerepo=gf-plus dovecot23 dovecot23-mysql -y'
             else:
                 command = 'apt-get -y install dovecot-mysql'
@@ -1568,7 +1568,7 @@ milter_default_action = accept
         command = "find /usr/local/CyberCP/ -name '*.pyc' -delete"
         ProcessUtilities.executioner(command)
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
             command = 'chown root:pdns /etc/pdns/pdns.conf'
             ProcessUtilities.executioner(command)

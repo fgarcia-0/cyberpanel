@@ -27,8 +27,8 @@ class DockerInstall:
                 ServerStatusUtil.executioner("podman rm -a", statusFile)  #  
 
                 # Remove Podman completely  
-                if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.centos]:  #  
-                    ServerStatusUtil.executioner("dnf remove -y podman", statusFile)  #  
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9, ProcessUtilities.centos]:  #
+                    ServerStatusUtil.executioner("dnf remove -y podman", statusFile)  #
                 else:  # Debian-based  
                     ServerStatusUtil.executioner("DEBIAN_FRONTEND=noninteractive apt-get remove -y podman", statusFile)  #
 
@@ -57,7 +57,7 @@ class DockerInstall:
                                                           "Removed systemd override forcing Podman.\n", 1)  #  
 
             # Install Docker based on OS version
-            if ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 if os.path.exists(ProcessUtilities.debugPath):
                     logging.CyberCPLogFileWriter.writeToFile(f'Docker installation started for cent8/9')
 

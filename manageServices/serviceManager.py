@@ -23,7 +23,7 @@ class ServiceManager:
     def managePDNS(self):
         type = self.extraArgs['type']
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             path = '/etc/pdns/pdns.conf'
         else:
             path = '/etc/powerdns/pdns.conf'
@@ -146,7 +146,7 @@ autosecondary=yes
 
         statusFile = open(ServerStatusUtil.lswsInstallStatusPath, 'w')
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             command = 'rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch'
             ServerStatusUtil.executioner(command, statusFile)
 
@@ -219,7 +219,7 @@ type=rpm-md
 
         statusFile = open(ServerStatusUtil.lswsInstallStatusPath, 'w')
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             command = 'rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch'
             ServerStatusUtil.executioner(command, statusFile)
 
@@ -261,11 +261,10 @@ type=rpm-md
 
         statusFile = open(ServerStatusUtil.lswsInstallStatusPath, 'w')
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             command = 'yum install redis -y'
             ServerStatusUtil.executioner(command, statusFile)
         else:
-
             command = 'DEBIAN_FRONTEND=noninteractive apt-get install redis-server -y'
             ServerStatusUtil.executioner(command, statusFile)
 
@@ -288,11 +287,10 @@ type=rpm-md
 
         statusFile = open(ServerStatusUtil.lswsInstallStatusPath, 'w')
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             command = 'yum erase redis -y'
             ServerStatusUtil.executioner(command, statusFile)
         else:
-
             command = 'apt-get remove redis-server -y'
             ServerStatusUtil.executioner(command, statusFile)
 

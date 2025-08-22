@@ -179,13 +179,14 @@ ubuntu = 0
 centos = 1
 cent8 = 2
 openeuler = 3
+cent9 = 4
 
 
 def get_distro():
     """
     Detect Linux distribution
     
-    Returns: Distribution constant (ubuntu, centos, cent8, or openeuler)
+    Returns: Distribution constant (ubuntu, centos, cent8, cent9, or openeuler)
     """
     distro = -1
     distro_file = ""
@@ -202,14 +203,19 @@ def get_distro():
 
         data = open('/etc/redhat-release', 'r').read()
 
-        if data.find('CentOS Linux release 8') > -1:
+        if 'CentOS Linux release 8' in data:
             return cent8
-        ## if almalinux 9 then pretty much same as cent8
-        if data.find('AlmaLinux release 8') > -1 or data.find('AlmaLinux release 9') > -1:
+        if 'CentOS Linux release 9' in data:
+            return cent9
+        if 'AlmaLinux release 8' in data:
             return cent8
-        if data.find('Rocky Linux release 8') > -1 or data.find('Rocky Linux 8') > -1 or data.find('rocky:8') > -1:
+        if 'AlmaLinux release 9' in data:
+            return cent9
+        if any(x in data for x in ['Rocky Linux release 8', 'Rocky Linux 8', 'rocky:8']):
             return cent8
-        if data.find('CloudLinux 8') or data.find('cloudlinux 8'):
+        if any(x in data for x in ['Rocky Linux release 9', 'Rocky Linux 9', 'rocky:9']):
+            return cent9
+        if 'CloudLinux 8' in data or 'cloudlinux 8' in data:
             return cent8
 
     else:
@@ -251,7 +257,7 @@ def get_package_install_command(distro, package_name, options=""):
     elif distro == centos:
         command = f"yum install -y {package_name} {options}"
         shell = False
-    else:  # cent8, openeuler
+    elif distro in [cent8, cent9, openeuler]:
         command = f"dnf install -y {package_name} {options}"
         shell = False
     
@@ -275,7 +281,7 @@ def get_package_remove_command(distro, package_name):
     elif distro == centos:
         command = f"yum remove -y {package_name}"
         shell = False
-    else:  # cent8, openeuler
+    elif distro in [cent8, cent9, openeuler]:
         command = f"dnf remove -y {package_name}"
         shell = False
     
@@ -293,9 +299,7 @@ def resFailed(distro, res):
     Returns:
         bool: True if failed, False if successful
     """
-    if distro == ubuntu and res != 0:
-        return True
-    elif distro == centos and res != 0:
+    if res != 0:
         return True
     return False
 

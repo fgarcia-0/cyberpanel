@@ -24,7 +24,7 @@ class phpUtilities:
 
             mailUtilities.checkHome()
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'sudo yum install ' + extension + ' -y'
             else:
                 command = 'sudo apt-get install ' + extension + ' -y'
@@ -58,7 +58,7 @@ class phpUtilities:
 
             mailUtilities.checkHome()
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'sudo rpm --nodeps -e  ' + extension + ' -v'
             else:
                 command = 'sudo apt-get remove -y  ' + extension
@@ -178,7 +178,7 @@ class phpUtilities:
 
             installUtilities.installUtilities.reStartLiteSpeed()
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 phpService = f'php{phpVers}-php-fpm'
             else:
                 phpService = f"php{phpVers.split('/')[3]}-fpm"
@@ -339,7 +339,7 @@ class phpUtilities:
             # Input string
             #php_version = "php73"
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = f'/opt/remi/{centOSPHP}/root/bin/php'
                 return command
             else:

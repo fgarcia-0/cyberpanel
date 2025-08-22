@@ -185,12 +185,13 @@ class ProcessUtilities(multi.Thread):
         if os.path.exists(distroPathAlma):
             with open(distroPathAlma, 'r') as f:
                 content = f.read()
-                if any(x in content for x in ['CentOS Linux release 8', 'AlmaLinux release 8', 'Rocky Linux release 8', 
-                                            'Rocky Linux release 9', 'AlmaLinux release 9', 'CloudLinux release 9', 
+                if any(x in content for x in ['CentOS Linux release 8', 'AlmaLinux release 8', 'Rocky Linux release 8',
                                             'CloudLinux release 8']):
-                    if any(x in content for x in ['AlmaLinux release 9', 'Rocky Linux release 9']):
-                        ProcessUtilities.alma9check = 1
                     return ProcessUtilities.cent8
+                if any(x in content for x in ['CentOS Linux release 9', 'AlmaLinux release 9', 'Rocky Linux release 9',
+                                            'CloudLinux release 9']):
+                    ProcessUtilities.alma9check = 1
+                    return ProcessUtilities.cent9
 
         # Default to Ubuntu if no other distribution is detected
         return ProcessUtilities.ubuntu

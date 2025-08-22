@@ -10,7 +10,7 @@ from plogical.processUtilities import ProcessUtilities
 class ApacheController:
     apacheInstallStatusPath = '/home/cyberpanel/apacheInstallStatus'
 
-    if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+    if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
 
         serverRootPath = '/etc/httpd'
@@ -154,7 +154,7 @@ LoadModule mpm_event_module modules/mod_mpm_event.so
     def InstallApache():
         try:
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = "yum install -y httpd httpd-tools mod_ssl php-fpm"
             else:
                 command = "apt update -y && sudo apt upgrade -y && apt install apache2 -y"
@@ -162,7 +162,7 @@ LoadModule mpm_event_module modules/mod_mpm_event.so
             if ProcessUtilities.executioner(command, None, True) == 0:
                 return "Failed to install Apache and PHP-FPM."
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 # command = "yum -y install centos-release-scl yum-utils"
                 # if ProcessUtilities.executioner(command) == 0:
@@ -243,7 +243,7 @@ LoadModule mpm_event_module modules/mod_mpm_event.so
 
             ###
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 serviceName = 'httpd'
             else:
                 serviceName = 'apache2'
@@ -262,7 +262,7 @@ LoadModule mpm_event_module modules/mod_mpm_event.so
     def phpVersions():
         # Version 5.4
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             if ProcessUtilities.alma9check == 1:
                 command = 'yum install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm'
             else:

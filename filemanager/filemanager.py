@@ -1023,7 +1023,7 @@ class FileManager:
         website = Websites.objects.get(domain=domainName)
         externalApp = website.externalApp
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             groupName = 'nobody'
         else:
             groupName = 'nogroup'

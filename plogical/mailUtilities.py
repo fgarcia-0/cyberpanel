@@ -439,7 +439,7 @@ class mailUtilities:
 
                 ## Generate keys
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     command = "/usr/sbin/opendkim-genkey -D /etc/opendkim/keys/%s -d %s -s default" % (virtualHostName, virtualHostName)
                 else:
                     command = "opendkim-genkey -D /etc/opendkim/keys/%s -d %s -s default" % (
@@ -696,7 +696,7 @@ milter_default_action = accept
             if os.path.exists(mailUtilities.spamassassinInstallLogPath):
                 os.remove(mailUtilities.spamassassinInstallLogPath)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'sudo yum install spamassassin -y'
             else:
                 command = 'sudo apt-get install spamassassin spamc -y'
@@ -819,7 +819,7 @@ return custom_keywords
 
                 command = 'sudo yum install rspamd clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd -y'
 
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 writeToFile = open(mailUtilities.RspamdInstallLogPath, 'a')
                 writeToFile.writelines("Configuring RSPAMD repo..\n")
@@ -905,7 +905,7 @@ clamav {
             wirtedata.close()
 
 
-            ### disable dkim signing in rspamd in ref to https://github.com/usmannasir/cyberpanel/issues/1176
+            ### disable dkim signing in rspamd in ref to https://github.com/fgarcia-0/cyberpanel/issues/1176
 
             DKIMPath = '/etc/rspamd/local.d/dkim_signing.conf'
 
@@ -953,7 +953,7 @@ read_servers = "127.0.0.1";
                 return 0
             else:
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                     command = 'setsebool -P antivirus_can_scan_system 1'
                     cmd = shlex.split(command)
 
@@ -1089,7 +1089,7 @@ LogFile /var/log/clamav/clamav.log
                 os.remove(mailUtilities.RspamdUnInstallLogPath)
 
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'sudo yum remove rspamd clamav clamav-daemon -y'
             else:
                 command = 'sudo apt purge rspamd clamav clamav-daemon -y'
@@ -1292,7 +1292,7 @@ LogFile /var/log/clamav/clamav.log
             TCPSocket= jsondata['TCPSocket']
             clamav_Debug= jsondata['clamav_Debug']
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 clamavconfpath = '/etc/clamd.d/scan.conf'
             elif ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20:
                 clamavconfpath = "/etc/clamav/clamd.conf"
@@ -1798,7 +1798,7 @@ class MailServerManagerUtils(multi.Thread):
     def install_postfix_dovecot(self):
         try:
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'yum remove postfix* dovecot* -y'
                 ProcessUtilities.executioner(command, None, True)
             elif ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20:
@@ -1836,7 +1836,7 @@ class MailServerManagerUtils(multi.Thread):
                 ProcessUtilities.executioner(command)
 
                 command = 'yum install --enablerepo=gf-plus -y postfix3 postfix3-ldap postfix3-mysql postfix3-pcre'
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 clAPVersion = self.FetchCloudLinuxAlmaVersionVersion()
                 type = clAPVersion.split('-')[0]
@@ -1876,7 +1876,7 @@ class MailServerManagerUtils(multi.Thread):
             if ProcessUtilities.decideDistro() == ProcessUtilities.centos:
                 command = 'yum --enablerepo=gf-plus -y install dovecot23 dovecot23-mysql'
                 ProcessUtilities.executioner(command)
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'dnf install --enablerepo=gf-plus dovecot23 dovecot23-mysql -y'
                 ProcessUtilities.executioner(command)
             else:
@@ -2410,7 +2410,7 @@ class MailServerManagerUtils(multi.Thread):
         command = "find /usr/local/CyberCP/ -name '*.pyc' -delete"
         ProcessUtilities.executioner(command)
 
-        if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.cent8:
+        if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
             command = 'chown root:pdns /etc/pdns/pdns.conf'
             ProcessUtilities.executioner(command)
 
@@ -2433,7 +2433,7 @@ class MailServerManagerUtils(multi.Thread):
                 os.system(command)
 
                 command = 'yum -y install opendkim'
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 command = 'yum -y erase opendkim*'
                 os.system(command)
@@ -2448,7 +2448,7 @@ class MailServerManagerUtils(multi.Thread):
 
             os.system(command)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'dnf install opendkim-tools -y'
                 ProcessUtilities.executioner(command)
 
@@ -2623,7 +2623,7 @@ class MailServerManagerUtils(multi.Thread):
     def configureOpenDKIM(self):
         try:
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'dnf install opendkim-tools -y'
                 ProcessUtilities.executioner(command)
 
@@ -2658,7 +2658,7 @@ milter_default_action = accept
             writeToFile.write(configData)
             writeToFile.close()
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20 or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20 or ProcessUtilities.decideDistro()  in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 data = open(openDKIMConfigurePath, 'r').readlines()
                 writeToFile = open(openDKIMConfigurePath, 'w')
                 for items in data:

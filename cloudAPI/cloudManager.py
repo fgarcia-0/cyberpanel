@@ -1102,7 +1102,7 @@ class CloudManager:
             inGB = math.ceil(float(mem.total) / float(1024 * 1024 * 1024))
             finalData['ramInGB'] = inGB
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 finalData['conf'] = ProcessUtilities.outputExecutioner('sudo cat /etc/my.cnf')
             else:
                 finalData['conf'] = ProcessUtilities.outputExecutioner('sudo cat /etc/mysql/my.cnf')
@@ -2598,7 +2598,7 @@ class CloudManager:
             if cliVersion.find('not found') > -1:
                 cliVersion = 'WP CLI Not installed.'
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 localCronPath = "/var/spool/cron/root"
             else:
                 localCronPath = "/var/spool/cron/crontabs/root"

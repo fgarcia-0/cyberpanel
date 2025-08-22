@@ -1149,7 +1149,7 @@ def installMailScanner(request):
 
             ### Check selinux
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'sestatus'
                 result = ProcessUtilities.outputExecutioner(command)
 
@@ -1522,7 +1522,7 @@ def fetchRspamdSettings(request):
                         TCPAddr = ''
                         TCPSocket = ''
 
-                        if  ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+                        if  ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                             clamavconfpath = '/etc/clamd.d/scan.conf'
                         elif ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu20:
                             clamavconfpath = "/etc/clamav/clamd.conf"
@@ -1861,7 +1861,7 @@ def RestartRspamd(request):
             command = "systemctl restart rspamd"
             ProcessUtilities.executioner(command)
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 command = 'systemctl start clamd@scan'
             else:
                 command = "systemctl restart clamav-daemon"

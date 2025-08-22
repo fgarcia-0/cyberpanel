@@ -1165,7 +1165,7 @@ class DNSManager:
     def installPowerDNS(self):
         try:
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
 
                 command = 'systemctl stop systemd-resolved'
                 ProcessUtilities.executioner(command, 'root', True)
@@ -1183,7 +1183,7 @@ class DNSManager:
 
             #### new install
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() == ProcessUtilities.ubuntu or ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 try:
                     os.rename('/etc/resolv.conf', 'etc/resolved.conf')
                 except OSError as e:
@@ -1232,7 +1232,7 @@ class DNSManager:
             ### let see if this is needed the chdir
             cwd = os.getcwd()
             os.chdir('/usr/local/CyberCP/install')
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 dnsPath = "/etc/pdns/pdns.conf"
             else:
                 dnsPath = "/etc/powerdns/pdns.conf"

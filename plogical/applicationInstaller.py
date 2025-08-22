@@ -204,7 +204,7 @@ class ApplicationInstaller(multi.Thread):
             finalConfPath = ApacheVhost.configBasePath + domainName + '.conf'
             if os.path.exists(finalConfPath):
 
-                if ProcessUtilities.decideDistro() == ProcessUtilities.cent8 or ProcessUtilities.decideDistro() == ProcessUtilities.centos:
+                if ProcessUtilities.decideDistro() in [ProcessUtilities.cent8, ProcessUtilities.cent9, ProcessUtilities.centos]:
                     command = 'dnf install php7.?-bcmath php7.?-imap php8.?-bcmath php8.?-imap -y'
                 else:
                     command = 'DEBIAN_FRONTEND=noninteractive apt-get install php7.?-bcmath php7.?-imap php8.?-bcmath php8.?-imap -y'
@@ -377,7 +377,7 @@ class ApplicationInstaller(multi.Thread):
 
             homeDir = "/home/" + domainName + "/public_html"
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 groupName = 'nobody'
             else:
                 groupName = 'nogroup'
@@ -422,7 +422,7 @@ class ApplicationInstaller(multi.Thread):
                     f.write(ProcessUtilities.outputExecutioner(command))
 
                 f.close()
-            elif ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            elif ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 if package == 'all':
                     command = 'yum update -y'
                     f.write(ProcessUtilities.outputExecutioner(command))
@@ -854,7 +854,7 @@ class ApplicationInstaller(multi.Thread):
 
             ### install CyberSMTP
 
-            command = f"{FinalPHPPath} -d error_reporting=0 /usr/bin/wp plugin install https://github.com/usmannasir/CyberSMTP/archive/refs/heads/main.zip --allow-root --path=" + finalPath
+            command = f"{FinalPHPPath} -d error_reporting=0 /usr/bin/wp plugin install https://github.com/fgarcia-0/CyberSMTP/archive/refs/heads/main.zip --allow-root --path=" + finalPath
             result = ProcessUtilities.outputExecutioner(command, externalApp)
             
             if os.path.exists(ProcessUtilities.debugPath):
@@ -1156,7 +1156,7 @@ class ApplicationInstaller(multi.Thread):
 
             homeDir = "/home/" + domainName + "/public_html"
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 groupName = 'nobody'
             else:
                 groupName = 'nogroup'
@@ -1549,7 +1549,7 @@ class ApplicationInstaller(multi.Thread):
     #
     #         homeDir = "/home/" + domainName + "/public_html"
     #
-    #         if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+    #         if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
     #             groupName = 'nobody'
     #         else:
     #             groupName = 'nogroup'
@@ -1653,7 +1653,7 @@ class ApplicationInstaller(multi.Thread):
 
             ## Set up cron if missing
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 localCronPath = "/var/spool/cron/root"
             else:
                 localCronPath = "/var/spool/cron/crontabs/root"
@@ -1883,7 +1883,7 @@ class ApplicationInstaller(multi.Thread):
 
             homeDir = "/home/" + domainName + "/public_html"
 
-            if ProcessUtilities.decideDistro() == ProcessUtilities.centos or ProcessUtilities.decideDistro() == ProcessUtilities.cent8:
+            if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
                 groupName = 'nobody'
             else:
                 groupName = 'nogroup'
