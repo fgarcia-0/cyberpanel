@@ -176,6 +176,10 @@ Total_RAM=$(free -m | awk '/Mem:/ { print $2 }')
 
 Remote_MySQL="Off"
 
+# Pin MariaDB to latest LTS
+MARIADB_VERSION="10.11.4"
+MARIADB_MAJOR="${MARIADB_VERSION%.*}"
+
 Final_Flags=()
 
 Git_User=""
@@ -287,22 +291,22 @@ gpgcheck=1
 EOF
     elif [[ "$Server_OS_Version" = "8" ]]; then
         cat <<EOF >/etc/yum.repos.d/MariaDB.repo
-# MariaDB 10.11 RHEL8 repository list
+# MariaDB ${MARIADB_MAJOR} RHEL8 repository list
 # http://downloads.mariadb.org/mariadb/repositories/
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.11/rhel8-amd64
+baseurl = http://yum.mariadb.org/${MARIADB_MAJOR}/rhel8-amd64
 module_hotfixes=1
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
     elif [[ "$Server_OS_Version" = "9" ]] && uname -m | grep -q 'x86_64'; then
         cat <<EOF >/etc/yum.repos.d/MariaDB.repo
-# MariaDB 10.11 CentOS repository list - created 2021-08-06 02:01 UTC
+# MariaDB ${MARIADB_MAJOR} CentOS repository list - created 2021-08-06 02:01 UTC
 # http://downloads.mariadb.org/mariadb/repositories/
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.11/rhel9-amd64/
+baseurl = http://yum.mariadb.org/${MARIADB_MAJOR}/rhel9-amd64/
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 enabled=1
 gpgcheck=1
@@ -1118,10 +1122,12 @@ if [[ $Server_OS = "CentOS" ]] ; then
   if [[ "$Server_OS_Version" = "9" ]]; then
     # Check if architecture is aarch64
     if uname -m | grep -q 'aarch64' ; then
-      # Run the following commands if architecture is aarch64
-      /usr/bin/crb enable
-      curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
-      dnf install libxcrypt-compat -y
+      if [[ "${Remote_MySQL^^}" != "ON" ]] ; then
+        # Run the following commands if architecture is aarch64 and local MySQL is desired
+        /usr/bin/crb enable
+        curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=${MARIADB_VERSION}
+        dnf install libxcrypt-compat -y
+      fi
     fi
 
     # check if OS is AlmaLinux
@@ -1175,6 +1181,7 @@ if [[ $Server_OS = "CentOS" ]] ; then
     curl -o /etc/yum.repos.d/powerdns-auth-43.repo https://cyberpanel.sh/repo.powerdns.com/repo-files/centos-auth-43.repo
       Check_Return "yum repo" "no_exit"
 
+    if [[ "$Remote_MySQL" != "On" ]] ; then
     cat <<EOF >/etc/yum.repos.d/MariaDB.repo
 # MariaDB 10.4 CentOS repository list - created 2021-08-06 02:01 UTC
 # http://downloads.mariadb.org/mariadb/repositories/
@@ -1184,6 +1191,7 @@ baseurl = http://yum.mariadb.org/10.4/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
+    fi
 
     yum install --nogpg -y https://cyberpanel.sh/mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm
       Check_Return "yum repo" "no_exit"
@@ -1260,9 +1268,11 @@ fi
 Pre_Install_Setup_CN_Repository() {
 if [[ "$Server_OS" = "CentOS" ]] && [[ "$Server_OS_Version" = "7" ]]; then
 
-  sed -i 's|http://yum.mariadb.org|https://cyberpanel.sh/yum.mariadb.org|g' /etc/yum.repos.d/MariaDB.repo
-  sed -i 's|https://yum.mariadb.org/RPM-GPG-KEY-MariaDB|https://cyberpanel.sh/yum.mariadb.org/RPM-GPG-KEY-MariaDB|g' /etc/yum.repos.d/MariaDB.repo
-  # use MariaDB Mirror
+  if [[ "$Remote_MySQL" != "On" ]]; then
+    sed -i 's|http://yum.mariadb.org|https://cyberpanel.sh/yum.mariadb.org|g' /etc/yum.repos.d/MariaDB.repo
+    sed -i 's|https://yum.mariadb.org/RPM-GPG-KEY-MariaDB|https://cyberpanel.sh/yum.mariadb.org/RPM-GPG-KEY-MariaDB|g' /etc/yum.repos.d/MariaDB.repo
+    # use MariaDB Mirror
+  fi
 
   sed -i 's|https://download.copr.fedorainfracloud.org|https://cyberpanel.sh/download.copr.fedorainfracloud.org|g' /etc/yum.repos.d/_copr_copart-restic.repo
 
@@ -1313,22 +1323,34 @@ if [[ "$Server_OS" = "CentOS" ]] || [[ "$Server_OS" = "openEuler" ]] ; then
   # Could add a --skip-system-update flag to bypass this
   yum update -y
   if [[ "$Server_OS_Version" = "7" ]] ; then
-    yum install -y wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel gpgme-devel curl-devel git socat openssl-devel MariaDB-shared mariadb-devel yum-utils python36u python36u-pip python36u-devel zip unzip bind-utils
+    PKGS="wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel gpgme-devel curl-devel git socat openssl-devel yum-utils python36u python36u-pip python36u-devel zip unzip bind-utils"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" MariaDB-shared mariadb-devel"
+    fi
+    yum install -y $PKGS
       Check_Return
     yum -y groupinstall development
       Check_Return
   elif [[ "$Server_OS_Version" = "8" ]] ; then
-    dnf install -y libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel mariadb-devel curl-devel git platform-python-devel tar socat python3 zip unzip bind-utils gpgme-devel
+    PKGS="libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel curl-devel git platform-python-devel tar socat python3 zip unzip bind-utils gpgme-devel"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" mariadb-devel"
+    fi
+    dnf install -y $PKGS
       Check_Return
   elif [[ "$Server_OS_Version" = "9" ]] ; then
-
-    #!/bin/bash
-
-
-    dnf install -y libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel MariaDB-server MariaDB-client MariaDB-devel curl-devel git platform-python-devel tar socat python3 zip unzip bind-utils gpgme-devel openssl-devel
+    PKGS="libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel curl-devel git platform-python-devel tar socat python3 zip unzip bind-utils gpgme-devel openssl-devel"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" MariaDB-server-${MARIADB_VERSION} MariaDB-client-${MARIADB_VERSION} MariaDB-devel-${MARIADB_VERSION}"
+    fi
+    dnf install -y $PKGS
       Check_Return
   elif [[ "$Server_OS_Version" = "20" ]] || [[ "$Server_OS_Version" = "22" ]] ; then
-    dnf install -y libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel mariadb-devel curl-devel git python3-devel tar socat python3 zip unzip bind-utils gpgme-devel
+    PKGS="libnsl zip wget strace net-tools curl which bc telnet htop libevent-devel gcc libattr-devel xz-devel curl-devel git python3-devel tar socat python3 zip unzip bind-utils gpgme-devel"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" mariadb-devel"
+    fi
+    dnf install -y $PKGS
       Check_Return
   fi
   ln -s /usr/bin/pip3 /usr/bin/pip
@@ -1343,10 +1365,18 @@ else
   fi
 
   if [[ "$Server_OS_Version" = "22" ]] ; then
-    DEBIAN_FRONTEND=noninteractive apt install -y dnsutils net-tools htop telnet libcurl4-gnutls-dev libgnutls28-dev libgcrypt20-dev libattr1 libattr1-dev liblzma-dev libgpgme-dev libcurl4-gnutls-dev libssl-dev nghttp2 libnghttp2-dev idn2 libidn2-dev libidn2-0-dev librtmp-dev libpsl-dev nettle-dev libgnutls28-dev libldap2-dev libgssapi-krb5-2 libk5crypto3 libkrb5-dev libcomerr2 libldap2-dev virtualenv git socat vim unzip zip libmariadb-dev-compat libmariadb-dev
+    PKGS="dnsutils net-tools htop telnet libcurl4-gnutls-dev libgnutls28-dev libgcrypt20-dev libattr1 libattr1-dev liblzma-dev libgpgme-dev libcurl4-gnutls-dev libssl-dev nghttp2 libnghttp2-dev idn2 libidn2-dev libidn2-0-dev librtmp-dev libpsl-dev nettle-dev libgnutls28-dev libldap2-dev libgssapi-krb5-2 libk5crypto3 libkrb5-dev libcomerr2 libldap2-dev virtualenv git socat vim unzip zip"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" libmariadb-dev-compat libmariadb-dev"
+    fi
+    DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
      Check_Return
   else
-    DEBIAN_FRONTEND=noninteractive apt install -y dnsutils net-tools htop telnet libcurl4-gnutls-dev libgnutls28-dev libgcrypt20-dev libattr1 libattr1-dev liblzma-dev libgpgme-dev libmariadbclient-dev libcurl4-gnutls-dev libssl-dev nghttp2 libnghttp2-dev idn2 libidn2-dev libidn2-0-dev librtmp-dev libpsl-dev nettle-dev libgnutls28-dev libldap2-dev libgssapi-krb5-2 libk5crypto3 libkrb5-dev libcomerr2 libldap2-dev virtualenv git socat vim unzip zip
+    PKGS="dnsutils net-tools htop telnet libcurl4-gnutls-dev libgnutls28-dev libgcrypt20-dev libattr1 libattr1-dev liblzma-dev libgpgme-dev libcurl4-gnutls-dev libssl-dev nghttp2 libnghttp2-dev idn2 libidn2-dev libidn2-0-dev librtmp-dev libpsl-dev nettle-dev libgnutls28-dev libldap2-dev libgssapi-krb5-2 libk5crypto3 libkrb5-dev libcomerr2 libldap2-dev virtualenv git socat vim unzip zip"
+    if [[ "$Remote_MySQL" != "On" ]] ; then
+      PKGS+=" libmariadbclient-dev"
+    fi
+    DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
      Check_Return
   fi
 
