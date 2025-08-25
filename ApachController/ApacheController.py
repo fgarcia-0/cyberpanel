@@ -263,7 +263,7 @@ LoadModule mpm_event_module modules/mod_mpm_event.so
         # Version 5.4
 
         if ProcessUtilities.decideDistro() in [ProcessUtilities.centos, ProcessUtilities.cent8, ProcessUtilities.cent9]:
-            if ProcessUtilities.alma9check == 1:
+            if ProcessUtilities.rhel9check == 1:
                 command = 'yum install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm'
             else:
                 command = 'yum install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm'

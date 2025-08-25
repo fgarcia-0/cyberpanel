@@ -19,7 +19,8 @@ class ProcessUtilities(multi.Thread):
     ubuntu = 0
     ubuntu20 = 3
     ubuntu22Check = 0
-    alma9check = 0
+    # Flag indicating if the underlying system is based on RHEL 9 (AlmaLinux 9, Rocky Linux 9, etc.)
+    rhel9check = 0
     server_address = '/usr/local/lscpd/admin/comm.sock'
     token = "unset"
     portPath = '/usr/local/lscp/conf/bind.conf'
@@ -190,7 +191,7 @@ class ProcessUtilities(multi.Thread):
                     return ProcessUtilities.cent8
                 if any(x in content for x in ['CentOS Linux release 9', 'AlmaLinux release 9', 'Rocky Linux release 9',
                                             'CloudLinux release 9']):
-                    ProcessUtilities.alma9check = 1
+                    ProcessUtilities.rhel9check = 1
                     return ProcessUtilities.cent9
 
         # Default to Ubuntu if no other distribution is detected

@@ -114,6 +114,27 @@ elif [[ $Server_OS = "CentOS" ]] && [[ "$Server_OS_Version" = "8" ]] ; then
 
   freshclam -v
 
+elif [[ $Server_OS = "CentOS" ]] && [[ "$Server_OS_Version" = "9" ]] ; then
+
+  setenforce 0
+  yum install -y perl yum-utils perl-CPAN
+  dnf install -y dnf-plugins-core
+  dnf config-manager --set-enabled crb
+  dnf install -y perl-IO-stringy
+  yum install -y gcc cpp perl bzip2 zip make patch automake rpm-build perl-Archive-Zip perl-Filesys-Df perl-OLE-Storage_Lite perl-Net-CIDR perl-DBI perl-MIME-tools perl-DBD-SQLite binutils glibc-devel perl-Filesys-Df zlib unzip zlib-devel wget mlocate clamav clamav-update "perl(DBD::mysql)"
+  dnf install -y unrar
+
+  export PERL_MM_USE_DEFAULT=1
+  curl -L https://cpanmin.us | perl - App::cpanminus
+
+  perl -MCPAN -e 'install Encoding::FixLatin'
+  perl -MCPAN -e 'install Digest::SHA1'
+  perl -MCPAN -e 'install Geo::IP'
+  perl -MCPAN -e 'install Razor2::Client::Agent'
+  perl -MCPAN -e 'install Net::Patricia'
+
+  freshclam -v
+
 elif [ "$CLNVERSION" = "ID=\"cloudlinux\"" ]; then
 
   setenforce 0

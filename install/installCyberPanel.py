@@ -10,6 +10,10 @@ from os.path import exists
 import time
 import install_utils
 
+# Pin MariaDB to latest LTS
+MARIADB_VERSION = "10.11.4"
+MARIADB_MAJOR = ".".join(MARIADB_VERSION.split('.')[:2])
+
 # distros - using from install_utils
 centos = install_utils.centos
 ubuntu = install_utils.ubuntu
@@ -336,6 +340,10 @@ class InstallCyberPanel:
             InstallCyberPanel.stdOut("LiteSpeed PHPs successfully installed!", 1)
 
     def installMySQL(self, mysql):
+        # Skip repository setup entirely if a remote database is configured
+        if str(self.remotemysql).upper() == 'ON':
+            install_utils.writeToFile('Remote MySQL detected, skipping MariaDB repository setup.')
+            return
 
         ############## Install mariadb ######################
 
@@ -351,20 +359,20 @@ class InstallCyberPanel:
             install_utils.call(command, self.distro, command, command, 1, 1, os.EX_OSERR)
             RepoPath = '/etc/apt/sources.list.d/mariadb.sources'
             RepoContent = f"""
-# MariaDB 10.11 repository list - created 2023-12-11 07:53 UTC
+# MariaDB {MARIADB_MAJOR} repository list - created 2023-12-11 07:53 UTC
 # https://mariadb.org/download/
 X-Repolib-Name: MariaDB
 Types: deb
 # deb.mariadb.org is a dynamic mirror if your preferred mirror goes offline. See https://mariadb.org/mirrorbits/ for details.
-# URIs: https://deb.mariadb.org/10.11/ubuntu
-URIs: https://mirrors.gigenet.com/mariadb/repo/10.11/ubuntu
+# URIs: https://deb.mariadb.org/{MARIADB_MAJOR}/ubuntu
+URIs: https://mirrors.gigenet.com/mariadb/repo/{MARIADB_MAJOR}/ubuntu
 Suites: jammy
 Components: main main/debug
 Signed-By: /etc/apt/keyrings/mariadb-keyring.pgp
 """
 
             if get_Ubuntu_release() > 21.00:
-                command = 'curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.11'
+                command = f'curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version={MARIADB_VERSION}'
                 result = install_utils.call(command, self.distro, command, command, 1, 0, os.EX_OSERR, True)
                 
                 # If the download fails, use manual repo configuration as fallback
@@ -382,13 +390,13 @@ Signed-By: /etc/apt/keyrings/mariadb-keyring.pgp
                     # Use multiple mirror options for better reliability
                     RepoPath = '/etc/apt/sources.list.d/mariadb.list'
                     codename = get_Ubuntu_code_name()
-                    RepoContent = f"""# MariaDB 10.11 repository list - manual fallback
+                    RepoContent = f"""# MariaDB {MARIADB_MAJOR} repository list - manual fallback
 # Primary mirror
-deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://mirror.mariadb.org/repo/10.11/ubuntu {codename} main
+deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://mirror.mariadb.org/repo/{MARIADB_MAJOR}/ubuntu {codename} main
 
 # Alternative mirrors (uncomment if primary fails)
-# deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://mirrors.gigenet.com/mariadb/repo/10.11/ubuntu {codename} main
-# deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://ftp.osuosl.org/pub/mariadb/repo/10.11/ubuntu {codename} main
+# deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://mirrors.gigenet.com/mariadb/repo/{MARIADB_MAJOR}/ubuntu {codename} main
+# deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyring.pgp] https://ftp.osuosl.org/pub/mariadb/repo/{MARIADB_MAJOR}/ubuntu {codename} main
 """
                     
                     WriteToFile = open(RepoPath, 'w')
@@ -410,10 +418,10 @@ deb [arch=amd64,arm64,ppc64el,s390x signed-by=/usr/share/keyrings/mariadb-keyrin
             RepoContent = f"""
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.11/rhel8-amd64
+baseurl = http://yum.mariadb.org/{MARIADB_MAJOR}/rhel8-amd64
 module_hotfixes=1
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1            
+gpgcheck=1
 """
             WriteToFile = open(RepoPath, 'w')
             WriteToFile.write(RepoContent)
@@ -442,7 +450,7 @@ gpgcheck=1
 
             else:
 
-                command = 'curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.11'
+                command = f'curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version={MARIADB_VERSION}'
                 install_utils.call(command, self.distro, command, command, 1, 1, os.EX_OSERR, True)
 
                 command = 'yum remove mariadb* -y'
@@ -455,7 +463,7 @@ gpgcheck=1
                 install_utils.call(command, self.distro, command, command, 1, 1, os.EX_OSERR, True)
 
 
-                command = 'dnf install MariaDB-server MariaDB-client MariaDB-backup -y'
+                command = f'dnf install MariaDB-server-{MARIADB_VERSION} MariaDB-client-{MARIADB_VERSION} MariaDB-backup-{MARIADB_VERSION} -y'
 
         install_utils.call(command, self.distro, command, command, 1, 1, os.EX_OSERR, True)
 
