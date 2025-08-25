@@ -43,6 +43,10 @@ elif [[ $Server_OS = "CentOS" ]] && [[ "$Server_OS_Version" = "8" ]] ; then
 
   yum remove -y MailScanner
 
+elif [[ $Server_OS = "CentOS" ]] && [[ "$Server_OS_Version" = "9" ]] ; then
+
+  yum remove -y MailScanner
+
 elif [[ $Server_OS = "Ubuntu" ]]; then
 
  apt purge -y mailscanner

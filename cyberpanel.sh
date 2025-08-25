@@ -1490,7 +1490,7 @@ if [[ "$Server_OS" = "CentOS" ]] ; then
     fi
     #CentOS 7 specific change
     if [[ "$Server_OS_Version" = "8" ]] ; then
-	      if grep -q -E "Rocky Linux" /etc/os-release ; then
+              if grep -q -E "Rocky Linux" /etc/os-release ; then
         if [[ "$Server_Country" = "CN" ]] ; then
           sed -i 's|rpm -Uvh http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el8.noarch.rpm|curl -o /etc/yum.repos.d/litespeed.repo https://cyberpanel.sh/litespeed/litespeed_cn.repo|g' install.py
         else
@@ -1498,7 +1498,16 @@ if [[ "$Server_OS" = "CentOS" ]] ; then
         fi
       fi
     fi
-    #CentOS 8 specific change
+    if [[ "$Server_OS_Version" = "9" ]] ; then
+              if grep -q -E "Rocky Linux" /etc/os-release ; then
+        if [[ "$Server_Country" = "CN" ]] ; then
+          sed -i 's|rpm -Uvh http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el9.noarch.rpm|curl -o /etc/yum.repos.d/litespeed.repo https://cyberpanel.sh/litespeed/litespeed_cn.repo|g' install.py
+        else
+          sed -i 's|rpm -Uvh http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el9.noarch.rpm|curl -o /etc/yum.repos.d/litespeed.repo https://cyberpanel.sh/litespeed/litespeed.repo|g' install.py
+        fi
+      fi
+    fi
+    #CentOS specific change
 
 elif  [[ "$Server_OS" = "Ubuntu" ]] ; then
     if [[ "$Server_OS_Version" = "20" ]] ; then

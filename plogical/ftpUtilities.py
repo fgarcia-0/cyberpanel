@@ -145,7 +145,7 @@ class FTPUtilities:
 
             ProcessUtilities.decideDistro()
 
-            if ProcessUtilities.ubuntu22Check == 1 or ProcessUtilities.alma9check:
+            if ProcessUtilities.ubuntu22Check == 1 or ProcessUtilities.rhel9check:
                 from crypt import crypt, METHOD_SHA512
                 FTPPass = crypt(password, METHOD_SHA512)
             else:
